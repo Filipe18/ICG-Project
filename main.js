@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 //import { SpotLightShadow } from 'three';
-//import sky from '../img/sky.jpg';
+import sky from '/assets/img/sky.webp';
 import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const assetLoader = new GLTFLoader();
@@ -38,13 +38,13 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
 
-camera.position.set(-10, 30, 30);
+camera.position.set(-10, 80, 0);
 orbit.update();
 
 const boxGeometry = new THREE.BoxGeometry();
 const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
-scene.add(box);
+/*scene.add(box);
 
 const planeGeometry = new THREE.PlaneGeometry(30, 30);
 const planeMaterial = new THREE.MeshStandardMaterial({
@@ -58,7 +58,7 @@ plane.rotation.x = -0.5 * Math.PI;
 plane.receiveShadow = true;
 
 const gridHelper = new THREE.GridHelper(30);
-scene.add(gridHelper);
+scene.add(gridHelper);*/
 
 const sphereGeometry = new THREE.SphereGeometry(4, 50, 50);
 const sphereMaterial = new THREE.MeshStandardMaterial({
@@ -71,10 +71,10 @@ scene.add(sphere);
 sphere.position.set(-10, 10, 0);
 sphere.castShadow = true;
 
-const ambientLight = new THREE.AmbientLight(0x333333);
+const ambientLight = new THREE.AmbientLight(0x333333, 5);
 scene.add(ambientLight);
 
-/*const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8);
+const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.5);
 scene.add(directionalLight);
 directionalLight.position.set(-30, 50, 0);
 directionalLight.castShadow = true;
@@ -85,16 +85,16 @@ scene.add(dLightHelper);
 
 
 const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-scene.add(dLightShadowHelper);*/
+//scene.add(dLightShadowHelper);
 
 const spotLight = new THREE.SpotLight(0xFFFFFF);
-scene.add(spotLight);
+//scene.add(spotLight);
 spotLight.position.set(-100, 100, 0);
 spotLight.castShadow = true;
-spotLight.angle = 0.2;
+spotLight.angle = 0.5;
 
 const sLightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(sLightHelper);
+//scene.add(sLightHelper);
 
 //scene.fog = new THREE.Fog(0xFFFFFF, 0, 200);
 
@@ -104,7 +104,7 @@ scene.add(sLightHelper);
 
 
 const textureLoader = new THREE.TextureLoader();
-//scene.background = textureLoader.load(sky);
+scene.background = textureLoader.load(sky);
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 /*scene.background = cubeTextureLoader.load([
     sky,
@@ -144,21 +144,25 @@ const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 const runway = new carregar('../assets/runway/scene.gltf');
 
+const hangar = new hangarLoad('../assets/hangar/scene.gltf');
+
+const airplane1 = new airplane1Load('../assets/airplane1/scene.gltf');
+
 
 
 const gui = new dat.GUI();
 
 const options = {
-    sphereColor: '#ffea00',
-    wireframe: false,
-    speed: 0.01,
+    //sphereColor: '#ffea00',
+    //wireframe: false,
+    //speed: 0.01,
     angle: 0.2,
-    penumbra: 0,
-    intensity: 1
+    //penumbra: 0,
+    //intensity: 1
 
 };
 
-gui.addColor(options, 'sphereColor').onChange(function (e) {
+/*gui.addColor(options, 'sphereColor').onChange(function (e) {
     sphere.material.color.set(e);
 });
 
@@ -167,10 +171,11 @@ gui.add(options, 'wireframe').onChange(function (e) {
 });
 
 gui.add(options, 'speed', 0, 0.1);
-gui.add(options, 'angle', 0, 1);
+
 gui.add(options, 'penumbra', 0, 1);
 gui.add(options, 'intensity', 0, 1);
-
+*/
+gui.add(options, 'angle', 0, 1);
 let step = 0;
 
 const mousePosition = new THREE.Vector2();
@@ -224,12 +229,38 @@ function carregar(url){
   const model = gltf.scene;
   scene.add(model);
   model.scale.set(0.2, 0.2, 0.2);
-  model.position.set(0, 0, 0);
+  model.position.set(0, 0, 45);
   console.log(model);
 }, undefined, function(error){
   console.error(error);
 });
 
+}
 
 
+function hangarLoad(url) {
+    assetLoader.load(url, function(gltf){
+        const model = gltf.scene;
+        scene.add(model);
+        model.scale.set(0.2, 0.2, 0.2);
+        model.position.set(0, 0, 45);
+        //model.rotation.y = 4;
+        console.log(model);
+      }, undefined, function(error){
+        console.error(error);
+      });
+}
+
+function airplane1Load(url){
+    assetLoader.load(url, function(gltf){
+        const model = gltf.scene;
+        scene.add(model);
+        model.scale.set(1, 1, 1);
+        model.position.set(42, 0, 8);
+        model.rotation.y = 4.7;
+
+        console.log(model);
+      }, undefined, function(error){
+        console.error(error);
+    });
 }
