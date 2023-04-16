@@ -6,8 +6,9 @@ import sky from '/assets/img/sky.webp';
 import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const assetLoader = new GLTFLoader();
-
+var airplaneMovement;
 let scene;
+var model;
 
 init();
 
@@ -148,6 +149,8 @@ const hangar = new hangarLoad('../assets/hangar/scene.gltf');
 
 const airplane1 = new airplane1Load('../assets/airplane1/scene.gltf');
 
+const grass = new grassLoad('../assets/grass/scene.gltf');
+
 
 
 const gui = new dat.GUI();
@@ -208,6 +211,15 @@ function animate() {
 
     rayCaster.setFromCamera(mousePosition, camera);
     const intersects = rayCaster.intersectObjects(scene.children);
+
+    //model.rotation.x = 0.1;
+
+    
+
+
+    
+
+    
     //console.log(intersects);
 
     // for (let i = 0; i < intersects.length; i++) {
@@ -251,16 +263,36 @@ function hangarLoad(url) {
       });
 }
 
+
+
 function airplane1Load(url){
     assetLoader.load(url, function(gltf){
-        const model = gltf.scene;
+        model = gltf.scene;
         scene.add(model);
         model.scale.set(1, 1, 1);
         model.position.set(42, 0, 8);
         model.rotation.y = 4.7;
+        
 
         console.log(model);
       }, undefined, function(error){
         console.error(error);
     });
 }
+
+function grassLoad(url){
+    assetLoader.load(url, function(gltf){
+        const model = gltf.scene;
+        scene.add(model);
+        model.scale.set(5, 5, 5);
+        model.position.set(0, -15, 45);
+        //model.rotation.y = 4;
+        console.log(model);
+      }, undefined, function(error){
+        console.error(error);
+      });
+}
+
+
+
+
