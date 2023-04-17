@@ -7,8 +7,40 @@ import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
-let scene;
+let scene, airplane;
 //var model;
+
+class Airplane {
+  constructor(){
+    assetLoader.load('../assets/airplane1/scene.gltf', (gltf)=>{
+      scene.add(gltf.scene);
+      this.airplane = gltf.scene;
+
+       
+       this.airplane.scale.set(1, 1, 1);
+       this.airplane.position.set(42, 0, 8);
+       this.airplane.rotation.y += 4.7;
+       this.speed = {
+                vel: 0,
+                rot: 0,
+            }
+      });
+  }
+  
+    update() {
+        if (this.airplane){
+          this.airplane.rotation.y += this.speed.rot
+          this.airplane.translateZ(this.speed.vel)
+        }
+    }
+    stop(){
+        this.speed.rot = 0
+        this.speed.vel = 0
+    }
+  
+  
+
+}
 
 init();
 
@@ -147,7 +179,10 @@ const runway = new carregar('../assets/runway/scene.gltf');
 
 const hangar = new hangarLoad('../assets/hangar/scene.gltf');
 
-const airplane1 = new airplane1Load('../assets/airplane1/scene.gltf');
+
+
+airplane = new Airplane();
+
 
 //const grass = new grassLoad('../assets/grass/scene.gltf');
 
@@ -195,7 +230,23 @@ const rayCaster = new THREE.Raycaster();
 
 const sphereId = sphere.id;
 
-
+window.addEventListener('keydown', function(e){
+  if(e.key == "ArrowUp"){
+   airplane.speed.vel = 2
+  }
+  if(e.key == "ArrowDown"){
+    airplane.speed.vel = -2
+  }
+  if(e.key == "ArrowLeft"){
+    airplane.speed.rot = 0.05
+  }
+  if(e.key == "ArrowRight"){
+    airplane.speed.rot = -0.05
+  }
+})
+window.addEventListener('keyup',function(e){
+  airplane.stop();
+})
 
 
 function animate() {
@@ -206,6 +257,8 @@ function animate() {
     step += options.speed;
     sphere.position.y = 10 * Math.abs(Math.sin(step));
 
+    airplane.update();
+
     spotLight.angle = options.angle;
     spotLight.penumbra = options.penumbra;
     spotLight.intensity = options.intensity;
@@ -214,8 +267,7 @@ function animate() {
     rayCaster.setFromCamera(mousePosition, camera);
     const intersects = rayCaster.intersectObjects(scene.children);
 
-    //model.rotation.x = 0.1;
-    //airplane1.position.x = 0;
+   
     
     
 
@@ -269,21 +321,7 @@ function hangarLoad(url) {
 
 
 
-function airplane1Load(url){
-    assetLoader.load(url, function(gltf){
-       const model = gltf.scene;
-        scene.add(model);
-        model.scale.set(1, 1, 1);
-        model.position.set(42, 0, 8);
-        model.rotation.y += 4.7;
-        
-        console.log(model);
-      }, undefined, function(error){
-        console.error(error);
-    });
 
-    
-}
 
 function grassLoad(url){
     assetLoader.load(url, function(gltf){
@@ -312,18 +350,7 @@ function grassLoad1(url){
 }
 
 
-class Airplane {
 
-  var model;
-
-  constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-  }
-
-
-}
 
 
 
