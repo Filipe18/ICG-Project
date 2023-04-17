@@ -149,7 +149,9 @@ const hangar = new hangarLoad('../assets/hangar/scene.gltf');
 
 const airplane1 = new airplane1Load('../assets/airplane1/scene.gltf');
 
-const grass = new grassLoad('../assets/grass/scene.gltf');
+//const grass = new grassLoad('../assets/grass/scene.gltf');
+
+const grass1 = new grassLoad1('../assets/grass2/scene.gltf');
 
 
 
@@ -292,6 +294,20 @@ function grassLoad(url){
         console.error(error);
       });
 }
+
+function grassLoad1(url){
+    assetLoader.load(url, function(gltf){
+        const model1 = gltf.scene;
+        scene.add(model1);
+        model1.scale.set(50, 10, 50);
+        model1.position.set(0, -15, 45);
+        //model1.rotation.y = 4;
+        console.log(model1);
+      }, undefined, function(error){
+        console.error(error);
+      });
+}
+
 
 
 
