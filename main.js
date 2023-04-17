@@ -8,7 +8,7 @@ import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
 let scene;
-var model;
+//var model;
 
 init();
 
@@ -151,7 +151,7 @@ const airplane1 = new airplane1Load('../assets/airplane1/scene.gltf');
 
 //const grass = new grassLoad('../assets/grass/scene.gltf');
 
-const grass1 = new grassLoad1('../assets/grass2/scene.gltf');
+//const grass1 = new grassLoad1('../assets/grass2/scene.gltf');
 
 
 
@@ -215,12 +215,11 @@ function animate() {
     const intersects = rayCaster.intersectObjects(scene.children);
 
     //model.rotation.x = 0.1;
-
+    //airplane1.position.x = 0;
+    
     
 
-
     
-
     
     //console.log(intersects);
 
@@ -249,6 +248,7 @@ function carregar(url){
   console.error(error);
 });
 
+
 }
 
 
@@ -259,27 +259,30 @@ function hangarLoad(url) {
         model.scale.set(0.2, 0.2, 0.2);
         model.position.set(0, 0, 45);
         //model.rotation.y = 4;
+        
         console.log(model);
       }, undefined, function(error){
         console.error(error);
       });
+
 }
 
 
 
 function airplane1Load(url){
     assetLoader.load(url, function(gltf){
-        model = gltf.scene;
+       const model = gltf.scene;
         scene.add(model);
         model.scale.set(1, 1, 1);
         model.position.set(42, 0, 8);
-        model.rotation.y = 4.7;
+        model.rotation.y += 4.7;
         
-
         console.log(model);
       }, undefined, function(error){
         console.error(error);
     });
+
+    
 }
 
 function grassLoad(url){
@@ -306,6 +309,20 @@ function grassLoad1(url){
       }, undefined, function(error){
         console.error(error);
       });
+}
+
+
+class Airplane {
+
+  var model;
+
+  constructor(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+
 }
 
 
