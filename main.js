@@ -7,9 +7,50 @@ import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
-let scene, airplane, forklift, airplane2;
+let scene, airplane, forklift, airplane2, runway;
 //var model;
 
+class Runway {
+  constructor(){
+    assetLoader.load('../assets/runway/scene.gltf', (gltf)=>{
+      scene.add(gltf.scene);
+      console.log(runway);
+      this.runway = gltf.scene;
+
+       
+       this.runway.scale.set(0.2, 0.2, 0.2);
+       this.runway.position.set(0, 0, 45);
+      /*
+      const colors = [];
+
+      this.runway.traverse((child) => {
+        if (child.material && child.material.color) {
+          const color = child.material.color.getHex();
+          if (!colors.includes(color)) {
+            colors.push(color);
+          }
+        }
+      });
+
+      console.log(colors);
+      */
+      const textureLoader = new THREE.TextureLoader();
+      const grassTexture = textureLoader.load('/assets/img/grass2.jpg_large');
+      this.runway.traverse((child) => {
+        if (child.material && child.material.color) {
+          const color = child.material.color.getHex();
+          if (color == '9737364') { // check if color is grey
+            child.material.color.set(0x023020); // set to green
+            //child.material.map = grassTexture;
+          }
+        }
+      });
+      });
+  }
+
+  
+
+}
 class Forklift {
   constructor(){
     assetLoader.load('../assets/forklift/scene.gltf', (gltf)=>{
@@ -105,7 +146,7 @@ class Airplane2 {
             this.speed.rot = 0
             this.speed.vel = 0
 
-            this.airplane2.rotation.y += 1;
+            //this.airplane2.rotation.y += 1;
           }
           
         }
@@ -252,7 +293,7 @@ const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 
 
-const runway = new carregar('../assets/runway/scene.gltf');
+//const runway = new carregar('../assets/runway/scene.gltf');
 
 const hangar = new hangarLoad('../assets/hangar/scene.gltf');
 
@@ -267,6 +308,8 @@ forklift = new Forklift();
 airplane = new Airplane();
 
 airplane2 = new Airplane2();
+
+runway = new Runway();
 
 
 //const grass = new grassLoad('../assets/grass/scene.gltf');
@@ -351,6 +394,8 @@ function animate() {
     airplane.update();
 
     airplane2.update();
+
+   // runway.color();
 
     spotLight.angle = options.angle;
     spotLight.penumbra = options.penumbra;
