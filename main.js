@@ -7,8 +7,38 @@ import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
-let scene, airplane;
+let scene, airplane, forklift;
 //var model;
+
+class Forklift {
+  constructor(){
+    assetLoader.load('../assets/forklift/scene.gltf', (gltf)=>{
+      scene.add(gltf.scene);
+      this.forklift = gltf.scene;
+
+       
+       this.forklift.scale.set(0.3, 0.3, 0.3);
+       this.forklift.position.set(0, 0, 25);
+       this.forklift.rotation.y += 4.7;
+       this.speed = {
+                vel: 0,
+                rot: 0,
+            }
+      });
+  }
+  
+    update() {
+        if (this.forklift){
+          this.forklift.rotation.y += this.speed.rot
+          this.forklift.translateX(this.speed.vel)
+        }
+    }
+    stop(){
+        this.speed.rot = 0
+        this.speed.vel = 0
+    }
+
+}
 
 class Airplane {
   constructor(){
@@ -17,11 +47,11 @@ class Airplane {
       this.airplane = gltf.scene;
 
        
-       this.airplane.scale.set(1, 1, 1);
+       this.airplane.scale.set(0.7, 0.7, 0.7);
        this.airplane.position.set(42, 0, 8);
-       this.airplane.rotation.y += 4.7;
+       this.airplane.rotation.y = 4.7;
        this.speed = {
-                vel: 0,
+                vel: 0.1,
                 rot: 0,
             }
       });
@@ -31,16 +61,20 @@ class Airplane {
         if (this.airplane){
           this.airplane.rotation.y += this.speed.rot
           this.airplane.translateZ(this.speed.vel)
+          
+          if (this.airplane.position.x <= -30) {
+            this.airplane.position.y += 0.05;
+          }
         }
     }
     stop(){
         this.speed.rot = 0
         this.speed.vel = 0
     }
-  
-  
 
-}
+};
+
+
 
 init();
 
@@ -179,7 +213,13 @@ const runway = new carregar('../assets/runway/scene.gltf');
 
 const hangar = new hangarLoad('../assets/hangar/scene.gltf');
 
+//const forkliftCar = new forkliftLoad('../assets/forklift/scene.gltf');
 
+//const airplane1 = new airplaneLoad('../assets/airplane1/scene.gltf');
+
+
+
+forklift = new Forklift();
 
 airplane = new Airplane();
 
@@ -232,21 +272,23 @@ const sphereId = sphere.id;
 
 window.addEventListener('keydown', function(e){
   if(e.key == "ArrowUp"){
-   airplane.speed.vel = 2
+   forklift.speed.vel = 0.07
   }
   if(e.key == "ArrowDown"){
-    airplane.speed.vel = -2
+    forklift.speed.vel = -0.07
   }
   if(e.key == "ArrowLeft"){
-    airplane.speed.rot = 0.05
+    forklift.speed.rot = 0.05
   }
   if(e.key == "ArrowRight"){
-    airplane.speed.rot = -0.05
+    forklift.speed.rot = -0.05
   }
 })
 window.addEventListener('keyup',function(e){
-  airplane.stop();
+  forklift.stop();
 })
+
+
 
 
 function animate() {
@@ -256,6 +298,10 @@ function animate() {
 
     step += options.speed;
     sphere.position.y = 10 * Math.abs(Math.sin(step));
+
+    forklift.update();
+
+    
 
     airplane.update();
 
@@ -299,8 +345,6 @@ function carregar(url){
 }, undefined, function(error){
   console.error(error);
 });
-
-
 }
 
 
@@ -308,7 +352,7 @@ function hangarLoad(url) {
     assetLoader.load(url, function(gltf){
         const model = gltf.scene;
         scene.add(model);
-        model.scale.set(0.2, 0.2, 0.2);
+        model.scale.set(0.7, 0.7, 0.7);
         model.position.set(0, 0, 45);
         //model.rotation.y = 4;
         
@@ -316,25 +360,24 @@ function hangarLoad(url) {
       }, undefined, function(error){
         console.error(error);
       });
-
 }
 
 
 
+function airplaneLoad(url){
+  assetLoader.load(url, function(gltf){
+    const model1 = gltf.scene;
+    scene.add(model1);
+    model1.scale.set(1, 1, 1);
+    model1.position.set(42, 0, 8);
+    //model1.rotation.y = 4;
+    console.log(model1);
+  }, undefined, function(error){
+    console.error(error);
+  });
+};
 
 
-function grassLoad(url){
-    assetLoader.load(url, function(gltf){
-        const model = gltf.scene;
-        scene.add(model);
-        model.scale.set(5, 5, 5);
-        model.position.set(0, -15, 45);
-        //model.rotation.y = 4;
-        console.log(model);
-      }, undefined, function(error){
-        console.error(error);
-      });
-}
 
 function grassLoad1(url){
     assetLoader.load(url, function(gltf){
@@ -347,6 +390,19 @@ function grassLoad1(url){
       }, undefined, function(error){
         console.error(error);
       });
+}
+
+function forkliftLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.4, 0.4, 0.4);
+      model1.position.set(0, 0, 25);
+      //model1.rotation.y = 4;
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
 }
 
 
