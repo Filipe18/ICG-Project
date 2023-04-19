@@ -7,7 +7,7 @@ import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
-let scene, airplane, forklift;
+let scene, airplane, forklift, airplane2;
 //var model;
 
 class Forklift {
@@ -65,6 +65,49 @@ class Airplane {
           if (this.airplane.position.x <= -30) {
             this.airplane.position.y += 0.05;
           }
+        }
+    }
+    stop(){
+        this.speed.rot = 0
+        this.speed.vel = 0
+    }
+
+};
+
+
+class Airplane2 {
+  constructor(){
+    assetLoader.load('../assets/airplane3/scene.gltf', (gltf)=>{
+      scene.add(gltf.scene);
+      this.airplane2 = gltf.scene;
+
+       
+       this.airplane2.scale.set(5, 5, 5);
+       this.airplane2.rotation.y = 4.7;
+       this.airplane2.position.set(42, 0, 8);
+       
+       this.speed = {
+                vel: 0.1,
+                rot: 0,
+            }
+      });
+  }
+
+  
+  
+    update() {
+        if (this.airplane2){
+          this.airplane2.rotation.y += this.speed.rot
+          this.airplane2.translateZ(this.speed.vel)
+          //this.airplane2.position.x += -0.06;
+
+          if (this.airplane2.position.x <= -12) {
+            this.speed.rot = 0
+            this.speed.vel = 0
+
+            this.airplane2.rotation.y += 1;
+          }
+          
         }
     }
     stop(){
@@ -223,6 +266,8 @@ forklift = new Forklift();
 
 airplane = new Airplane();
 
+airplane2 = new Airplane2();
+
 
 //const grass = new grassLoad('../assets/grass/scene.gltf');
 
@@ -304,6 +349,8 @@ function animate() {
     
 
     airplane.update();
+
+    airplane2.update();
 
     spotLight.angle = options.angle;
     spotLight.penumbra = options.penumbra;
