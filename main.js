@@ -16,6 +16,11 @@ class Runway {
   constructor(){
     assetLoader.load('../assets/runway/scene.gltf', (gltf)=>{
       scene.add(gltf.scene);
+      gltf.scene.traverse(function(node){
+        if (node.isMesh)
+            node.receiveShadow = true;
+    })
+      gltf.scene.receiveShadow = true;
       console.log(runway);
       this.runway = gltf.scene;
 
@@ -23,7 +28,8 @@ class Runway {
        
        this.runway.scale.set(0.2, 0.2, 0.2);
        this.runway.position.set(0, 0, 45);
-       this.runway.receiveShadow = true;
+       //this.runway.receiveShadow = true;
+       
 
        
       /*
@@ -44,7 +50,7 @@ class Runway {
       const grassTexture = textureLoader.load('/assets/img/grass4.jpg');
       grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
       grassTexture.repeat.set(15, 15);
-      grassTexture.receiveShadow = true;
+      //grassTexture.receiveShadow = true;
       this.runway.traverse((child) => {
         if (child.material && child.material.color) {
           const color = child.material.color.getHex();
@@ -53,6 +59,8 @@ class Runway {
             child.material.map = grassTexture;
             child.material.map.receiveShadow = true;
           }
+          if (child.isMesh)
+            child.receiveShadow = true;
         }
       });
       });
@@ -282,32 +290,47 @@ plane.receiveShadow = true;
 const gridHelper = new THREE.GridHelper(30);
 scene.add(gridHelper);*/
 
-const sphereGeometry = new THREE.SphereGeometry(4, 50, 50);
+const sphereGeometry = new THREE.SphereGeometry(200, 20, 20);
 const sphereMaterial = new THREE.MeshStandardMaterial({
-    color: 0x0000FF,
+    color: 0x000000,
     wireframe: false
 
 });
 const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(sphere);
-sphere.position.set(-10, 10, 0);
+
+sphere.position.set(0, 100, 0);
+
 sphere.castShadow = true;
 
 const ambientLight = new THREE.AmbientLight(0x333333, 5);
 scene.add(ambientLight);
+//amblientLight.castShadow = true;
 
-const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1.5);
+const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
 scene.add(directionalLight);
 directionalLight.position.set(-30, 50, 0);
+directionalLight.angle = 1.6;
 directionalLight.castShadow = true;
 directionalLight.shadow.camera.bottom = -12;
 
+
 const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
-scene.add(dLightHelper);
+//scene.add(dLightHelper);
 
 
 const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-//scene.add(dLightShadowHelper);
+scene.add(dLightShadowHelper);
+
+directionalLight.shadow.mapSize.width = 2048
+    directionalLight.shadow.mapSize.height= 2048
+    const d = 5000;
+    directionalLight.shadow.camera.left = - d;
+    directionalLight.shadow.camera.right = d;
+    directionalLight.shadow.camera.top = d;
+    directionalLight.shadow.camera.bottom = - d;
+    directionalLight.shadow.camera.near = 500;
+    directionalLight.shadow.camera.far = 3000;
 
 const spotLight = new THREE.SpotLight(0xFFFFFF);
 //scene.add(spotLight);
