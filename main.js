@@ -4,6 +4,8 @@ import * as dat from 'dat.gui';
 //import { SpotLightShadow } from 'three';
 import sky from '/assets/img/sky.webp';
 import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as YUKA from 'yuka';
+
 
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
@@ -17,9 +19,13 @@ class Runway {
       console.log(runway);
       this.runway = gltf.scene;
 
+
        
        this.runway.scale.set(0.2, 0.2, 0.2);
        this.runway.position.set(0, 0, 45);
+       this.runway.receiveShadow = true;
+
+       
       /*
       const colors = [];
 
@@ -35,13 +41,17 @@ class Runway {
       console.log(colors);
       */
       const textureLoader = new THREE.TextureLoader();
-      const grassTexture = textureLoader.load('/assets/img/grass2.jpg_large');
+      const grassTexture = textureLoader.load('/assets/img/grass4.jpg');
+      grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+      grassTexture.repeat.set(15, 15);
+      grassTexture.receiveShadow = true;
       this.runway.traverse((child) => {
         if (child.material && child.material.color) {
           const color = child.material.color.getHex();
           if (color == '9737364') { // check if color is grey
-            child.material.color.set(0x023020); // set to green
-            //child.material.map = grassTexture;
+            //child.material.color.set(0x003300); // set to green
+            child.material.map = grassTexture;
+            child.material.map.receiveShadow = true;
           }
         }
       });
@@ -184,6 +194,67 @@ const camera = new THREE.PerspectiveCamera(
     1000
 );
 
+
+const vehicle = new YUKA.Vehicle();
+
+const path = new YUKA.Path();
+path.add(new YUKA.Vector3(300, 100, 8));
+path.add(new YUKA.Vector3(80, 15, 8));
+path.add(new YUKA.Vector3(70, 10, 8));
+path.add(new YUKA.Vector3(60, 5, 8));
+path.add(new YUKA.Vector3(42, 1, 8));
+path.add(new YUKA.Vector3(-6, 0, 8));
+path.add(new YUKA.Vector3(-42, 0, 8));
+path.add(new YUKA.Vector3(-42, 0, 12));
+path.add(new YUKA.Vector3(-42, 0, 23));
+path.add(new YUKA.Vector3(-35, 0, 23));
+path.add(new YUKA.Vector3(-13, 0, 23));
+path.add(new YUKA.Vector3(-13, 0, 32));
+
+
+
+
+
+
+
+
+path.loop = false;
+
+vehicle.position.copy(path.current());
+
+
+
+
+const position = [];
+for (let i = 0; i < path._waypoints.length; i++) {
+  const waypoint = path._waypoints[i];
+  position.push(waypoint.x, waypoint.y, waypoint.z);
+  
+}
+
+
+const followPathBehavior = new YUKA.FollowPathBehavior(path, 2);
+vehicle.steering.add(followPathBehavior);
+
+const onPathBehavior = new YUKA.OnPathBehavior(path, 2);
+//onPathBehavior.radius = 0.8;
+vehicle.steering.add(onPathBehavior);
+
+vehicle.maxSpeed = 10;
+
+const entityManager = new YUKA.EntityManager();
+entityManager.add(vehicle);
+
+const loader = new GLTFLoader();
+loader.load('../assets/airplane3/scene.gltf', function(gltf){
+  const model = gltf.scene;
+ // model.scale.set(5, 5, 5);
+  scene.add(model);
+  model.matrixAutoUpdate = false;
+  vehicle.scale = new YUKA.Vector3(5, 5, 5);
+  vehicle.setRenderComponent(model, sync);
+});
+
 const orbit = new OrbitControls(camera, renderer.domElement);
 
 const axesHelper = new THREE.AxesHelper(5);
@@ -231,7 +302,7 @@ directionalLight.position.set(-30, 50, 0);
 directionalLight.castShadow = true;
 directionalLight.shadow.camera.bottom = -12;
 
-const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 5);
+const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
 scene.add(dLightHelper);
 
 
@@ -295,7 +366,7 @@ const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 //const runway = new carregar('../assets/runway/scene.gltf');
 
-const hangar = new hangarLoad('../assets/hangar/scene.gltf');
+//const hangar = new hangarLoad('../assets/hangar/scene.gltf');
 
 //const forkliftCar = new forkliftLoad('../assets/forklift/scene.gltf');
 
@@ -307,9 +378,39 @@ forklift = new Forklift();
 
 airplane = new Airplane();
 
-airplane2 = new Airplane2();
+//airplane2 = new Airplane2();
 
 runway = new Runway();
+
+const controlTower = new controlTowerLoad('/assets/control_tower/scene.gltf');
+
+/*const vehicleGeometry = new THREE.ConeBufferGeometry(0.1, 0.5, 8);
+vehicleGeometry.rotateX(Math.PI * 0.5);
+const vehicleMaterial = new THREE.MeshNormalMaterial();
+const vehicleMesh = new THREE.Mesh(vehicleGeometry, vehicleMaterial);
+vehicleMesh.matrixAutoUpdate = false;
+scene.add(vehicleMesh);*/
+
+
+
+
+function sync(entity, renderComponent){
+  renderComponent.matrix.copy(entity.worldMatrix);
+}
+
+
+
+const lineGeometry = new THREE.BufferGeometry();
+lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3));
+
+
+const lineMaterial = new THREE.LineBasicMaterial({color: 0xFFFFFF});
+const lines = new THREE.LineLoop(lineGeometry, lineMaterial);
+scene.add(lines);
+
+const time = new YUKA.Time();
+
+
 
 
 //const grass = new grassLoad('../assets/grass/scene.gltf');
@@ -393,9 +494,12 @@ function animate() {
 
     airplane.update();
 
-    airplane2.update();
+    //airplane2.update();
 
    // runway.color();
+
+   const delta = time.update().getDelta();
+   entityManager.update(delta);
 
     spotLight.angle = options.angle;
     spotLight.penumbra = options.penumbra;
@@ -491,6 +595,24 @@ function forkliftLoad(url){
       model1.scale.set(0.4, 0.4, 0.4);
       model1.position.set(0, 0, 25);
       //model1.rotation.y = 4;
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function controlTowerLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(10, 10, 10);
+      model1.position.set(28, 10.5, 30);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
       console.log(model1);
     }, undefined, function(error){
       console.error(error);
