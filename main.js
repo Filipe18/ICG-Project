@@ -266,7 +266,7 @@ loader.load('../assets/airplane3/scene.gltf', function(gltf){
 const orbit = new OrbitControls(camera, renderer.domElement);
 
 const axesHelper = new THREE.AxesHelper(5);
-scene.add(axesHelper);
+//scene.add(axesHelper);
 
 camera.position.set(-10, 80, 0);
 orbit.update();
@@ -320,7 +320,7 @@ const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
 
 
 const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-scene.add(dLightShadowHelper);
+//scene.add(dLightShadowHelper);
 
 directionalLight.shadow.mapSize.width = 2048
     directionalLight.shadow.mapSize.height= 2048
@@ -429,7 +429,7 @@ lineGeometry.setAttribute('position', new THREE.Float32BufferAttribute(position,
 
 const lineMaterial = new THREE.LineBasicMaterial({color: 0xFFFFFF});
 const lines = new THREE.LineLoop(lineGeometry, lineMaterial);
-scene.add(lines);
+//scene.add(lines);
 
 const time = new YUKA.Time();
 
@@ -628,8 +628,8 @@ function controlTowerLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(10, 10, 10);
-      model1.position.set(28, 10.5, 30);
+      model1.scale.set(7, 7, 7);
+      model1.position.set(28, 7.5, 30);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
