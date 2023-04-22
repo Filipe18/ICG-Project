@@ -1,0 +1,11 @@
+Model Information:
+* title:	StreetLamp_04_C
+* source:	https://sketchfab.com/3d-models/streetlamp-04-c-c3db045da420476bb49d19efade3630f
+* author:	Misam Ali Rizvi (https://sketchfab.com/MisamAliRizvi)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "StreetLamp_04_C" (https://sketchfab.com/3d-models/streetlamp-04-c-c3db045da420476bb49d19efade3630f) by Misam Ali Rizvi (https://sketchfab.com/MisamAliRizvi) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
