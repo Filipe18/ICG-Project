@@ -11,6 +11,7 @@ const assetLoader = new GLTFLoader();
 var airplaneMovement;
 let scene, airplane, forklift, airplane2, runway;
 //var model;
+const minY = 0;
 
 class Runway {
   constructor(){
@@ -389,7 +390,7 @@ const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 //const runway = new carregar('../assets/runway/scene.gltf');
 
-//const hangar = new hangarLoad('../assets/hangar/scene.gltf');
+//const hangar = new hangarLoad('../assets/forks/scene.gltf');
 
 //const forkliftCar = new forkliftLoad('../assets/forklift/scene.gltf');
 
@@ -406,6 +407,17 @@ airplane = new Airplane();
 runway = new Runway();
 
 const controlTower = new controlTowerLoad('/assets/control_tower/scene.gltf');
+
+const hangar2 = new hangar2Load('/assets/test/scene.gltf');
+
+const building = new buildingLoad('/assets/building/scene.gltf');
+
+const helicopter = new helicopterLoad('/assets/helicopter/scene.gltf');
+
+const heliport = new heliportLoad('/assets/heliport/scene.gltf');
+
+
+//const runWayLights = new runwayLightsLoad('/assets/runway_lights/scene.gltf');
 
 /*const vehicleGeometry = new THREE.ConeBufferGeometry(0.1, 0.5, 8);
 vehicleGeometry.rotateX(Math.PI * 0.5);
@@ -532,9 +544,6 @@ function animate() {
     rayCaster.setFromCamera(mousePosition, camera);
     const intersects = rayCaster.intersectObjects(scene.children);
 
-   
-    
-    
 
     
     
@@ -546,6 +555,9 @@ function animate() {
     //     }
         
     // }
+    if (camera.position.y < minY) {
+      camera.position.y = minY; // Defina a posição y da câmera para o limite mínimo
+  }
 
     renderer.render(scene, camera);
 }
@@ -643,7 +655,79 @@ function controlTowerLoad(url){
 }
 
 
+function buildingLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.5, 0.5, 0.5);
+      model1.position.set(45, 0, 85);
+      //model1.rotation.y = 4;
 
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function hangar2Load(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.01, 0.01, 0.01);
+      model1.position.set(28, 0, 0);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+
+function helicopterLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.5, 0.5, 0.5);
+      model1.position.set(28, 1, 0);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+
+function heliportLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.7,0.7, 0.7);
+      model1.position.set(-57, 0, 30);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
 
 
 
