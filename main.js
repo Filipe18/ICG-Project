@@ -3,6 +3,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 //import { SpotLightShadow } from 'three';
 import sky from '/assets/img/sky.webp';
+import sky2 from '/assets/img/sky2.jpg';
+
 import{GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as YUKA from 'yuka';
 
@@ -269,7 +271,7 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 const axesHelper = new THREE.AxesHelper(5);
 //scene.add(axesHelper);
 
-camera.position.set(-10, 80, 0);
+camera.position.set(-10, 80, 300);
 orbit.update();
 
 const boxGeometry = new THREE.BoxGeometry();
@@ -350,7 +352,7 @@ const sLightHelper = new THREE.SpotLightHelper(spotLight);
 
 
 const textureLoader = new THREE.TextureLoader();
-scene.background = textureLoader.load(sky);
+scene.background = textureLoader.load(sky2);
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 /*scene.background = cubeTextureLoader.load([
     sky,
@@ -408,13 +410,27 @@ runway = new Runway();
 
 const controlTower = new controlTowerLoad('/assets/control_tower/scene.gltf');
 
-const hangar2 = new hangar2Load('/assets/test/scene.gltf');
+
 
 const building = new buildingLoad('/assets/building/scene.gltf');
 
 const helicopter = new helicopterLoad('/assets/helicopter/scene.gltf');
 
 const heliport = new heliportLoad('/assets/heliport/scene.gltf');
+
+const smallRunway = new smallRunwayLoad('/assets/smallRunway/scene.gltf');
+
+const building2 = new buildingLoad2('/assets/building/scene.gltf');
+
+const parking = new parkingLoad('/assets/parking/scene.gltf');
+
+const sun = new sunLoad('/assets/sun/scene.gltf');
+
+
+
+
+
+//const mountain = new mountainLoad('/assets/mountain/scene.gltf');
 
 
 //const runWayLights = new runwayLightsLoad('/assets/runway_lights/scene.gltf');
@@ -673,6 +689,25 @@ function buildingLoad(url){
     });
 }
 
+function buildingLoad2(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.5, 0.5, 0.5);
+      model1.position.set(-5, 0, 85);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+
 function hangar2Load(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
@@ -730,6 +765,77 @@ function heliportLoad(url){
 }
 
 
+function smallRunwayLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.5, 0.5, 0.1);
+      model1.position.set(-57, 0, 30);
+      //model1.rotation.y = 4;
 
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+
+function mountainLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(30, 30, 28);
+      model1.position.set(0, 0.5, 80);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function parkingLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(1.3, 1.3, 1.3);
+      model1.position.set(-80, 0, 114);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function sunLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(2.5, 2.5, 2.5);
+      model1.position.set(0, 100, 250);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
 
     
