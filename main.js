@@ -426,6 +426,8 @@ const parking = new parkingLoad('/assets/parking/scene.gltf');
 
 const sun = new sunLoad('/assets/sun/scene.gltf');
 
+const fence = new fenceLoad('/assets/fence/scene.gltf');
+
 
 
 
@@ -708,32 +710,14 @@ function buildingLoad2(url){
 }
 
 
-function hangar2Load(url){
-  assetLoader.load(url, function(gltf){
-      const model1 = gltf.scene;
-      scene.add(model1);
-      model1.scale.set(0.01, 0.01, 0.01);
-      model1.position.set(28, 0, 0);
-      //model1.rotation.y = 4;
-
-      model1.traverse(function(node){
-        if (node.isMesh)
-            node.castShadow = true;
-    })
-      console.log(model1);
-    }, undefined, function(error){
-      console.error(error);
-    });
-}
-
 
 function helicopterLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
       model1.scale.set(0.5, 0.5, 0.5);
-      model1.position.set(28, 1, 0);
-      //model1.rotation.y = 4;
+      model1.position.set(-61, 1.5, 31);
+      model1.rotation.y = 4.7;
 
       model1.traverse(function(node){
         if (node.isMesh)
@@ -751,7 +735,7 @@ function heliportLoad(url){
       const model1 = gltf.scene;
       scene.add(model1);
       model1.scale.set(0.7,0.7, 0.7);
-      model1.position.set(-57, 0, 30);
+      model1.position.set(-61, 0, 32);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -769,9 +753,9 @@ function smallRunwayLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.5, 0.5, 0.1);
-      model1.position.set(-57, 0, 30);
-      //model1.rotation.y = 4;
+      model1.scale.set(0.5, 0.5, 0.08);
+      model1.position.set(-40.7, 0, 32);
+      model1.rotation.y = 1.58;
 
       model1.traverse(function(node){
         if (node.isMesh)
@@ -784,23 +768,6 @@ function smallRunwayLoad(url){
 }
 
 
-function mountainLoad(url){
-  assetLoader.load(url, function(gltf){
-      const model1 = gltf.scene;
-      scene.add(model1);
-      model1.scale.set(30, 30, 28);
-      model1.position.set(0, 0.5, 80);
-      //model1.rotation.y = 4;
-
-      model1.traverse(function(node){
-        if (node.isMesh)
-            node.castShadow = true;
-    })
-      console.log(model1);
-    }, undefined, function(error){
-      console.error(error);
-    });
-}
 
 function parkingLoad(url){
   assetLoader.load(url, function(gltf){
@@ -839,3 +806,20 @@ function sunLoad(url){
 }
 
     
+function fenceLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.3,0.03, 0.1);
+      model1.position.set(44.5, 0, -17.5);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
