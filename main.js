@@ -11,7 +11,7 @@ import * as YUKA from 'yuka';
 
 const assetLoader = new GLTFLoader();
 var airplaneMovement;
-let scene, airplane, forklift, airplane2, runway;
+let scene, airplane, airplane2, runway;
 //var model;
 const minY = 0;
 
@@ -102,6 +102,20 @@ class Forklift {
 
 }
 
+function random(min, max){
+  return Math.random() * (max - min) + min;
+}
+
+class BriefCase{
+  constructor(_scene){
+    scene.add(_scene); 
+    _scene.scale.set(0.1, 0.1, 0.1);
+    _scene.position.set(random(-20, 20), 0, random(40, 60));
+    
+    this.briefcase = _scene; 
+  }
+}
+
 class Airplane {
   constructor(){
     assetLoader.load('../assets/airplane1/scene.gltf', (gltf)=>{
@@ -181,9 +195,33 @@ class Airplane2 {
 
 
 
+
+async function loadModel(url){
+  return new Promise((resolve, reject) => {
+    assetLoader.load(url, (gltf) => {
+      resolve(gltf.scene)
+    })
+  })
+}
+
+
+let forkliftModel = null;
+
+async function createBriefCase(){
+  if(!forkliftModel){
+    forkliftModel = await loadModel('assets/briefcase/scene.gltf');
+  }
+  return new BriefCase(forkliftModel.clone());
+}
+
+
+let briefcases = []
+const briefcase_count = 10
+
+
 init();
 
-function init(){
+async function init(){
 
 
 //const runwayUrl = new URL('../assets/scene.gltf', import.meta.url);
@@ -221,11 +259,6 @@ path.add(new YUKA.Vector3(-42, 0, 23));
 path.add(new YUKA.Vector3(-35, 0, 23));
 path.add(new YUKA.Vector3(-13, 0, 23));
 path.add(new YUKA.Vector3(-13, 0, 32));
-
-
-
-
-
 
 
 
@@ -271,27 +304,14 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 const axesHelper = new THREE.AxesHelper(5);
 //scene.add(axesHelper);
 
-camera.position.set(-10, 80, 300);
+camera.position.set(-10, 40, 300);
 orbit.update();
 
 const boxGeometry = new THREE.BoxGeometry();
 const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x00FF00 });
 const box = new THREE.Mesh(boxGeometry, boxMaterial);
 /*scene.add(box);
-
-const planeGeometry = new THREE.PlaneGeometry(30, 30);
-const planeMaterial = new THREE.MeshStandardMaterial({
-    color: 0xFFFFFF,
-    side: THREE.DoubleSide
-
-});
-const plane = new THREE.Mesh(planeGeometry, planeMaterial);
-scene.add(plane);
-plane.rotation.x = -0.5 * Math.PI;
-plane.receiveShadow = true;
-
-const gridHelper = new THREE.GridHelper(30);
-scene.add(gridHelper);*/
+*/
 
 const sphereGeometry = new THREE.SphereGeometry(200, 20, 20);
 const sphereMaterial = new THREE.MeshStandardMaterial({
@@ -353,56 +373,25 @@ const sLightHelper = new THREE.SpotLightHelper(spotLight);
 
 const textureLoader = new THREE.TextureLoader();
 scene.background = textureLoader.load(sky2);
-const cubeTextureLoader = new THREE.CubeTextureLoader();
-/*scene.background = cubeTextureLoader.load([
-    sky,
-    sky,
-    sky,
-    sky,
-    sky,
-    sky
-    
-]);*/
-
-// const box2Geometry = new THREE.BoxGeometry(4, 4, 4);
-// const box2Material = new THREE.MeshBasicMaterial({
-//     //color: 0x00FF00,
-//     //map: textureLoader.load(sky)
-
-// });
-
-// const box2MultiMaterial = [
-//     new THREE.MeshBasicMaterial({map: textureLoader.load(sky)}),
-//     new THREE.MeshBasicMaterial({map: textureLoader.load(sky)}),
-//     new THREE.MeshBasicMaterial({map: textureLoader.load(sky)}),
-//     new THREE.MeshBasicMaterial({map: textureLoader.load(sky)}),
-//     new THREE.MeshBasicMaterial({map: textureLoader.load(sky)}),
-//     new THREE.MeshBasicMaterial({map: textureLoader.load(sky)})
-
-// ];
-// const box2 = new THREE.Mesh(box2Geometry, box2MultiMaterial);
-// scene.add(box2);
-// box2.position.set(0, 15, 10);
-// box2.material.map = textureLoader.load(sky);
 
 
 
 
 
 
-//const runway = new carregar('../assets/runway/scene.gltf');
-
-//const hangar = new hangarLoad('../assets/forks/scene.gltf');
-
-//const forkliftCar = new forkliftLoad('../assets/forklift/scene.gltf');
-
-//const airplane1 = new airplaneLoad('../assets/airplane1/scene.gltf');
-
-
-
-forklift = new Forklift();
+const forklift = new Forklift();
 
 airplane = new Airplane();
+
+
+
+
+
+
+
+//briefcase = new BriefCase();
+
+
 
 //airplane2 = new Airplane2();
 
@@ -422,27 +411,27 @@ const smallRunway = new smallRunwayLoad('/assets/smallRunway/scene.gltf');
 
 const building2 = new buildingLoad2('/assets/building/scene.gltf');
 
-const parking = new parkingLoad('/assets/parking/scene.gltf');
+//const parking = new parkingLoad('/assets/parking/scene.gltf');
 
 const sun = new sunLoad('/assets/sun/scene.gltf');
 
 const fence = new fenceLoad('/assets/fence/scene.gltf');
 
+const fence2 = new fenceLoad2('/assets/fence/scene.gltf');
 
+const fence3 = new fenceLoad3('/assets/fence/scene.gltf');
 
+const fence4 = new fenceLoad4('/assets/fence/scene.gltf');
 
+const fence5 = new fenceLoad5('/assets/fence/scene.gltf');
 
-//const mountain = new mountainLoad('/assets/mountain/scene.gltf');
+const fence6 = new fenceLoad6('/assets/fence/scene.gltf');
 
+const fence7 = new fenceLoad7('/assets/fence/scene.gltf');
 
-//const runWayLights = new runwayLightsLoad('/assets/runway_lights/scene.gltf');
+const fence8 = new fenceLoad8('/assets/fence/scene.gltf');
 
-/*const vehicleGeometry = new THREE.ConeBufferGeometry(0.1, 0.5, 8);
-vehicleGeometry.rotateX(Math.PI * 0.5);
-const vehicleMaterial = new THREE.MeshNormalMaterial();
-const vehicleMesh = new THREE.Mesh(vehicleGeometry, vehicleMaterial);
-vehicleMesh.matrixAutoUpdate = false;
-scene.add(vehicleMesh);*/
+const fence9 = new fenceLoad9('/assets/fence/scene.gltf');
 
 
 
@@ -484,19 +473,7 @@ const options = {
 
 };
 
-/*gui.addColor(options, 'sphereColor').onChange(function (e) {
-    sphere.material.color.set(e);
-});
 
-gui.add(options, 'wireframe').onChange(function (e) {
-    sphere.material.wireframe = e;
-});
-
-gui.add(options, 'speed', 0, 0.1);
-
-gui.add(options, 'penumbra', 0, 1);
-gui.add(options, 'intensity', 0, 1);
-*/
 gui.add(options, 'angle', 0, 1);
 let step = 0;
 
@@ -512,18 +489,24 @@ const rayCaster = new THREE.Raycaster();
 
 const sphereId = sphere.id;
 
+for (let i = 0; i < briefcase_count; i++) {
+  const briefcase = await createBriefCase()
+  briefcases.push(briefcase);
+  
+}
+
 window.addEventListener('keydown', function(e){
   if(e.key == "ArrowUp"){
-   forklift.speed.vel = 0.07
+   forklift.speed.vel = 0.2
   }
   if(e.key == "ArrowDown"){
-    forklift.speed.vel = -0.07
+    forklift.speed.vel = -0.2
   }
   if(e.key == "ArrowLeft"){
-    forklift.speed.rot = 0.05
+    forklift.speed.rot = 0.2
   }
   if(e.key == "ArrowRight"){
-    forklift.speed.rot = -0.05
+    forklift.speed.rot = -0.2
   }
 })
 window.addEventListener('keyup',function(e){
@@ -531,7 +514,25 @@ window.addEventListener('keyup',function(e){
 })
 
 
+function isColliding(obj1, obj2){
+  return(
+    Math.abs(obj1.position.x - obj2.position.x) < 1 &&
+    Math.abs(obj1.position.z - obj2.position.z) < 1
+  )
+}
 
+function checkCollision(){
+  if(forklift.forklift){
+    briefcases.forEach(briefcase => {
+      if(briefcase.briefcase){
+        if (isColliding(forklift.forklift, briefcase.briefcase)) {
+          scene.remove(briefcase.briefcase);
+
+        }
+      }
+    })
+  }
+}
 
 function animate() {
     box.rotation.x += 0.01;
@@ -543,9 +544,11 @@ function animate() {
 
     forklift.update();
 
-    
+    checkCollision()
 
     airplane.update();
+
+    
 
     //airplane2.update();
 
@@ -584,75 +587,6 @@ renderer.setAnimationLoop(animate);
 
 }
 
-function carregar(url){
-  assetLoader.load(url, function(gltf){
-  const model = gltf.scene;
-  scene.add(model);
-  model.scale.set(0.2, 0.2, 0.2);
-  model.position.set(0, 0, 45);
-  console.log(model);
-}, undefined, function(error){
-  console.error(error);
-});
-}
-
-
-function hangarLoad(url) {
-    assetLoader.load(url, function(gltf){
-        const model = gltf.scene;
-        scene.add(model);
-        model.scale.set(0.7, 0.7, 0.7);
-        model.position.set(0, 0, 45);
-        //model.rotation.y = 4;
-        
-        console.log(model);
-      }, undefined, function(error){
-        console.error(error);
-      });
-}
-
-
-
-function airplaneLoad(url){
-  assetLoader.load(url, function(gltf){
-    const model1 = gltf.scene;
-    scene.add(model1);
-    model1.scale.set(1, 1, 1);
-    model1.position.set(42, 0, 8);
-    //model1.rotation.y = 4;
-    console.log(model1);
-  }, undefined, function(error){
-    console.error(error);
-  });
-};
-
-
-
-function grassLoad1(url){
-    assetLoader.load(url, function(gltf){
-        const model1 = gltf.scene;
-        scene.add(model1);
-        model1.scale.set(50, 10, 50);
-        model1.position.set(0, -15, 45);
-        //model1.rotation.y = 4;
-        console.log(model1);
-      }, undefined, function(error){
-        console.error(error);
-      });
-}
-
-function forkliftLoad(url){
-  assetLoader.load(url, function(gltf){
-      const model1 = gltf.scene;
-      scene.add(model1);
-      model1.scale.set(0.4, 0.4, 0.4);
-      model1.position.set(0, 0, 25);
-      //model1.rotation.y = 4;
-      console.log(model1);
-    }, undefined, function(error){
-      console.error(error);
-    });
-}
 
 function controlTowerLoad(url){
   assetLoader.load(url, function(gltf){
@@ -813,6 +747,169 @@ function fenceLoad(url){
       model1.scale.set(0.3,0.03, 0.1);
       model1.position.set(44.5, 0, -17.5);
       //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+
+function fenceLoad2(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.3,0.03, 0.1);
+      model1.position.set(-5, 0, -17.5);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad3(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.28,0.03, 0.1);
+      model1.position.set(-52, 0, -17.5);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad4(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.31,0.03, 0.1);
+      model1.position.set(70, 0, 7.6);
+      model1.rotation.y = 1.567;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad5(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.31,0.03, 0.1);
+      model1.position.set(70, 0, 59);
+      model1.rotation.y = 1.567;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad6(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.31,0.03, 0.1);
+      model1.position.set(-75, 0, 7.6);
+      model1.rotation.y = 1.567;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad7(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.165,0.03, 0.1);
+      model1.position.set(-75, 0, 46,5);
+      model1.rotation.y = 1.567;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad8(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.275,0.03, 0.1);
+      model1.position.set(-52.5, 0, 60);
+      //model1.rotation.y = 4;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function fenceLoad9(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(0.13,0.03, 0.1);
+      model1.position.set(-30, 0, 70);
+      model1.rotation.y = 1.567;
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
+function sandLoad(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(500, 500, 500);
+      model1.position.set(0, -83, 0);
+      //model1.rotation.y = 1.567;
 
       model1.traverse(function(node){
         if (node.isMesh)
