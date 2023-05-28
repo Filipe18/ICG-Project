@@ -537,8 +537,7 @@ function checkCollision(){
 function animate() {
     box.rotation.x += 0.01;
     box.rotation.y += 0.01;
-
-
+    
     step += options.speed;
     sphere.position.y = 10 * Math.abs(Math.sin(step));
 
