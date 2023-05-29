@@ -74,12 +74,12 @@ class Runway {
 }
 class Forklift {
   constructor(){
-    assetLoader.load('../assets/forklift/scene.gltf', (gltf)=>{
+    assetLoader.load('../assets/airport_truck/scene.gltf', (gltf)=>{
       scene.add(gltf.scene);
       this.forklift = gltf.scene;
 
        
-       this.forklift.scale.set(0.3, 0.3, 0.3);
+       this.forklift.scale.set(0.01, 0.01, 0.01);
        this.forklift.position.set(0, 0, 25);
        this.forklift.rotation.y += 4.7;
        this.speed = {
@@ -92,7 +92,7 @@ class Forklift {
     update() {
         if (this.forklift){
           this.forklift.rotation.y += this.speed.rot
-          this.forklift.translateX(this.speed.vel)
+          this.forklift.translateZ(this.speed.vel)
         }
     }
     stop(){
@@ -516,8 +516,8 @@ window.addEventListener('keyup',function(e){
 
 function isColliding(obj1, obj2){
   return(
-    Math.abs(obj1.position.x - obj2.position.x) < 1 &&
-    Math.abs(obj1.position.z - obj2.position.z) < 1
+    Math.abs(obj1.position.x - obj2.position.x) < 3 &&
+    Math.abs(obj1.position.z - obj2.position.z) < 3
   )
 }
 
