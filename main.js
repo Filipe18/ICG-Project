@@ -193,6 +193,41 @@ class Airplane2 {
 
 };
 
+class ThirdPersonCamera{
+  constructor(params){
+    this._params = params;
+    this._camera = params.camera;
+
+    this._currentPosition = new THREE.Vector3();
+    this._currentLookat = new THREE.Vector3();
+  }
+  _CalculateIdealOffset(){
+    const idealOffset = new THREE.Vector3(-15, 30, -30);
+    idealOffset.applyQuaternion(this._params.target.Rotation);
+    idealOffset.add(this._params.target.Position);
+    return idealOffset;
+  }
+
+  _CalculateIdealLookat(){
+    const idealLookat = new THREE.Vector3(0, 10, 50);
+    idealLookat.applyQuaternion(this._params.target.Rotation);
+    idealLookat.add(this._params.target.Position);
+    return idealLookat;
+  }
+
+
+  Update(timeElapsedS){
+    const idealOffset = this._CalculateIdealOffset();
+    const idealLookat = this._CalculateIdealLookat();
+
+    this._currentPosition.copy(idealOffset);
+    this._currentLookat.copy(idealLookat);
+
+    this._camera.position.copy(this._currentPosition);
+    this._camera.lookAt(this._currentLookat);
+  }
+}
+
 
 
 
@@ -237,11 +272,12 @@ document.body.appendChild(renderer.domElement);
 scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
-    45,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
+  45,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000
 );
+
 
 
 const vehicle = new YUKA.Vehicle();
@@ -433,6 +469,8 @@ const fence8 = new fenceLoad8('/assets/fence/scene.gltf');
 
 const fence9 = new fenceLoad9('/assets/fence/scene.gltf');
 
+//const heli = new animated_heliLoad('/assets/animated_helicopter/source/animatedhelicopter-1.glb');
+
 
 
 
@@ -503,10 +541,10 @@ window.addEventListener('keydown', function(e){
     forklift.speed.vel = -0.2
   }
   if(e.key == "ArrowLeft"){
-    forklift.speed.rot = 0.2
+    forklift.speed.rot = 0.1
   }
   if(e.key == "ArrowRight"){
-    forklift.speed.rot = -0.2
+    forklift.speed.rot = -0.1
   }
 })
 window.addEventListener('keyup',function(e){
@@ -577,7 +615,9 @@ function animate() {
     // }
     if (camera.position.y < minY) {
       camera.position.y = minY; // Defina a posição y da câmera para o limite mínimo
-  }
+    }
+
+    //this._thirdPersonCamera.Update(timeElapsedS);
 
     renderer.render(scene, camera);
 }
@@ -902,13 +942,13 @@ function fenceLoad9(url){
     });
 }
 
-function sandLoad(url){
+
+function animated_heliLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(500, 500, 500);
-      model1.position.set(0, -83, 0);
-      //model1.rotation.y = 1.567;
+      model1.scale.set(1, 1, 1);
+      model1.position.set(0, 0, 0);
 
       model1.traverse(function(node){
         if (node.isMesh)
