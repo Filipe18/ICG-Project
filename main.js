@@ -49,6 +49,7 @@ class Runway {
 
       console.log(colors);
       */
+      const array = []
       const textureLoader = new THREE.TextureLoader();
       const grassTexture = textureLoader.load('/assets/img/grass4.jpg');
       grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
@@ -56,6 +57,7 @@ class Runway {
       //grassTexture.receiveShadow = true;
       this.runway.traverse((child) => {
         if (child.material && child.material.color) {
+          
           const color = child.material.color.getHex();
           if (color == '9737364') { // check if color is grey
             //child.material.color.set(0x003300); // set to green
@@ -66,9 +68,10 @@ class Runway {
             child.receiveShadow = true;
         }
       });
+      console.log(array)
       });
   }
-
+ 
   
 
 }
@@ -82,6 +85,11 @@ class Forklift {
        this.forklift.scale.set(0.01, 0.01, 0.01);
        this.forklift.position.set(0, 0, 25);
        this.forklift.rotation.y += 4.7;
+       this.forklift.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+            node.receiveShadow = true;
+    })
        this.speed = {
                 vel: 0,
                 rot: 0,
@@ -109,10 +117,16 @@ function random(min, max){
 class BriefCase{
   constructor(_scene){
     scene.add(_scene); 
-    _scene.scale.set(0.1, 0.1, 0.1);
+    _scene.scale.set(0.2, 0.2, 0.2);
     _scene.position.set(random(-20, 20), 0, random(40, 60));
+    _scene.traverse(function(node){
+      if (node.isMesh)
+          node.castShadow = true;
+          node.receiveShadow = true;
+  })
     
     this.briefcase = _scene; 
+
   }
 }
 
@@ -194,34 +208,38 @@ class Airplane2 {
 };
 
 class ThirdPersonCamera{
-  constructor(params){
+  constructor(params) {
     this._params = params;
     this._camera = params.camera;
 
     this._currentPosition = new THREE.Vector3();
     this._currentLookat = new THREE.Vector3();
   }
-  _CalculateIdealOffset(){
-    const idealOffset = new THREE.Vector3(-15, 30, -30);
+
+  _CalculateIdealOffset() {
+    const idealOffset = new THREE.Vector3(-15, 20, -30);
     idealOffset.applyQuaternion(this._params.target.Rotation);
     idealOffset.add(this._params.target.Position);
     return idealOffset;
   }
 
-  _CalculateIdealLookat(){
+  _CalculateIdealLookat() {
     const idealLookat = new THREE.Vector3(0, 10, 50);
     idealLookat.applyQuaternion(this._params.target.Rotation);
     idealLookat.add(this._params.target.Position);
     return idealLookat;
   }
 
-
-  Update(timeElapsedS){
+  Update(timeElapsed) {
     const idealOffset = this._CalculateIdealOffset();
     const idealLookat = this._CalculateIdealLookat();
 
-    this._currentPosition.copy(idealOffset);
-    this._currentLookat.copy(idealLookat);
+    // const t = 0.05;
+    // const t = 4.0 * timeElapsed;
+    const t = 1.0 - Math.pow(0.001, timeElapsed);
+
+    this._currentPosition.lerp(idealOffset, t);
+    this._currentLookat.lerp(idealLookat, t);
 
     this._camera.position.copy(this._currentPosition);
     this._camera.lookAt(this._currentLookat);
@@ -268,6 +286,9 @@ renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement);
+
+
+
 
 scene = new THREE.Scene();
 
@@ -340,7 +361,7 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 const axesHelper = new THREE.AxesHelper(5);
 //scene.add(axesHelper);
 
-camera.position.set(-10, 40, 300);
+camera.position.set(-10, 10, 300);
 orbit.update();
 
 const boxGeometry = new THREE.BoxGeometry();
@@ -362,26 +383,26 @@ sphere.position.set(0, 100, 0);
 
 sphere.castShadow = true;
 
-const ambientLight = new THREE.AmbientLight(0x333333, 5);
+const ambientLight = new THREE.AmbientLight(0x333333, 3);
 scene.add(ambientLight);
 //amblientLight.castShadow = true;
 
-const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+/*const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 3);
 scene.add(directionalLight);
-directionalLight.position.set(-30, 50, 0);
-directionalLight.angle = 1.6;
+directionalLight.position.set(-90, 100, 40);
+directionalLight.angle = 1000;
 directionalLight.castShadow = true;
-directionalLight.shadow.camera.bottom = -12;
+//directionalLight.shadow.camera.bottom = -5;
 
 
 const dLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
-//scene.add(dLightHelper);
+scene.add(dLightHelper);
 
 
 const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-//scene.add(dLightShadowHelper);
+scene.add(dLightShadowHelper);
 
-directionalLight.shadow.mapSize.width = 2048
+directionalLight.shadow.mapSize.width = 5000
     directionalLight.shadow.mapSize.height= 2048
     const d = 5000;
     directionalLight.shadow.camera.left = - d;
@@ -390,15 +411,15 @@ directionalLight.shadow.mapSize.width = 2048
     directionalLight.shadow.camera.bottom = - d;
     directionalLight.shadow.camera.near = 500;
     directionalLight.shadow.camera.far = 3000;
-
-const spotLight = new THREE.SpotLight(0xFFFFFF);
-//scene.add(spotLight);
-spotLight.position.set(-100, 100, 0);
+*/
+const spotLight = new THREE.SpotLight(0xFFFFFF, 2);
+scene.add(spotLight);
+spotLight.position.set(-100, 60, 0);
 spotLight.castShadow = true;
-spotLight.angle = 0.5;
+spotLight.angle = 2;
 
 const sLightHelper = new THREE.SpotLightHelper(spotLight);
-//scene.add(sLightHelper);
+scene.add(sLightHelper);
 
 //scene.fog = new THREE.Fog(0xFFFFFF, 0, 200);
 
@@ -469,7 +490,8 @@ const fence8 = new fenceLoad8('/assets/fence/scene.gltf');
 
 const fence9 = new fenceLoad9('/assets/fence/scene.gltf');
 
-//const heli = new animated_heliLoad('/assets/animated_helicopter/source/animatedhelicopter-1.glb');
+const small_city = new small_cityLoad('/assets/small_city2/scene.gltf');
+
 
 
 
@@ -572,6 +594,11 @@ function checkCollision(){
   }
 }
 
+/*this._thirdPersonCamera = new ThirdPersonCamera({
+  camera: this._camera,
+  target: this._controls,
+});*/
+
 function animate() {
     box.rotation.x += 0.01;
     box.rotation.y += 0.01;
@@ -593,7 +620,7 @@ function animate() {
 
    const delta = time.update().getDelta();
    entityManager.update(delta);
-
+  /*
     spotLight.angle = options.angle;
     spotLight.penumbra = options.penumbra;
     spotLight.intensity = options.intensity;
@@ -601,7 +628,7 @@ function animate() {
 
     rayCaster.setFromCamera(mousePosition, camera);
     const intersects = rayCaster.intersectObjects(scene.children);
-
+  */
 
     
     
@@ -631,8 +658,8 @@ function controlTowerLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(7, 7, 7);
-      model1.position.set(28, 7.5, 30);
+      model1.scale.set(5, 5, 5);
+      model1.position.set(28, 5, 30);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -690,6 +717,7 @@ function helicopterLoad(url){
       scene.add(model1);
       model1.scale.set(0.5, 0.5, 0.5);
       model1.position.set(-61, 1.5, 31);
+      //model1.position.set(0, 1.5, 0);
       model1.rotation.y = 4.7;
 
       model1.traverse(function(node){
@@ -712,8 +740,11 @@ function heliportLoad(url){
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
-        if (node.isMesh)
-            node.castShadow = true;
+        if (node.isMesh){
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+            
     })
       console.log(model1);
     }, undefined, function(error){
@@ -733,6 +764,7 @@ function smallRunwayLoad(url){
       model1.traverse(function(node){
         if (node.isMesh)
             node.castShadow = true;
+            node.receiveShadow = true;
     })
       console.log(model1);
     }, undefined, function(error){
@@ -943,12 +975,12 @@ function fenceLoad9(url){
 }
 
 
-function animated_heliLoad(url){
+function small_cityLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(1, 1, 1);
-      model1.position.set(0, 0, 0);
+      model1.scale.set(100, 100, 100);
+      model1.position.set(-53, 0, 83);
 
       model1.traverse(function(node){
         if (node.isMesh)
