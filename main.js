@@ -282,6 +282,8 @@ init();
 
 async function init(){
 
+  
+
 
 //const runwayUrl = new URL('../assets/scene.gltf', import.meta.url);
 
@@ -304,6 +306,47 @@ const camera = new THREE.PerspectiveCamera(
   0.2,
   1000
 );
+
+const camera2 = new THREE.PerspectiveCamera(
+  95,
+  window.innerWidth / window.innerHeight,
+  0.2,
+  1000
+);
+camera2.position.set(53, 30, 17);
+camera2.lookAt(scene.position);
+
+
+const camera3 = new THREE.PerspectiveCamera(
+  95,
+  window.innerWidth / window.innerHeight,
+  0.2,
+  1000
+);
+camera3.position.set(-116, 5, 18.5);
+camera3.lookAt(scene.position);
+
+// Create a variable to track the active camera
+
+scene.add(camera2);
+
+scene.add(camera3)
+
+let activeCamera = camera;
+
+// Add the new camera to the scene
+
+
+// Switch between cameras when 'C' key is pressed
+window.addEventListener('keydown', function (e) {
+  if (e.key === 'c' || e.key === 'C') {
+      activeCamera = camera2;
+    } else if(e.key === 'k' || e.key === 'K') {
+      activeCamera = camera3;
+    } else if(e.key === 'p' || e.key === 'P') {
+      activeCamera = camera;
+  }
+});
 
 
 
@@ -653,7 +696,7 @@ function animate() {
 
     //this._thirdPersonCamera.Update(timeElapsedS);
 
-    renderer.render(scene, camera);
+    renderer.render(scene, activeCamera);
 }
 
 renderer.setAnimationLoop(animate);
