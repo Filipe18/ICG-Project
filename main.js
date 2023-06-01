@@ -124,6 +124,8 @@ class BriefCase{
           node.castShadow = true;
           node.receiveShadow = true;
   })
+
+  
     
     this.briefcase = _scene; 
 
@@ -169,6 +171,7 @@ class Airplane {
     }
 
 };
+
 
 
 class Airplane2 {
@@ -364,6 +367,14 @@ path.add(new YUKA.Vector3(-86, 0, -31));
 path.add(new YUKA.Vector3(-86, 0, 4));
 path.add(new YUKA.Vector3(-24, 0, 4));
 path.add(new YUKA.Vector3(-24, 0, 14));
+
+
+
+
+
+
+
+
 //path.add(new YUKA.Vector3(-13, 0, 23));
 //path.add(new YUKA.Vector3(-13, 0, 32));
 
