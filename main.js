@@ -469,7 +469,7 @@ spotLight.castShadow = true;
 spotLight.angle = 2;
 
 const sLightHelper = new THREE.SpotLightHelper(spotLight);
-scene.add(sLightHelper);
+//scene.add(sLightHelper);
 
 //scene.fog = new THREE.Fog(0xFFFFFF, 0, 200);
 
@@ -520,7 +520,7 @@ const building2 = new buildingLoad2('/assets/building/scene.gltf');
 
 const parking = new parkingLoad('/assets/parking/scene.gltf');
 
-const sun = new sunLoad('/assets/sun/scene.gltf');
+//const sun = new sunLoad('/assets/sun/scene.gltf');
 
 const fence = new fenceLoad('/assets/fence/scene.gltf');
 
@@ -571,7 +571,7 @@ const time = new YUKA.Time();
 
 
 
-const gui = new dat.GUI();
+//const gui = new dat.GUI();
 
 const options = {
     //sphereColor: '#ffea00',
@@ -584,7 +584,7 @@ const options = {
 };
 
 
-gui.add(options, 'angle', 0, 1);
+//gui.add(options, 'angle', 0, 1);
 let step = 0;
 
 const mousePosition = new THREE.Vector2();
@@ -710,7 +710,6 @@ function controlTowerLoad(url){
       scene.add(model1);
       model1.scale.set(10, 10, 10);
       model1.position.set(53, 9.5, 17);
-      //model1.rotation.y = 4;
 
       model1.traverse(function(node){
         if (node.isMesh)
