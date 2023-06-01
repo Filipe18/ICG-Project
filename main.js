@@ -29,7 +29,7 @@ class Runway {
 
 
        
-       this.runway.scale.set(0.2, 0.2, 0.2);
+       this.runway.scale.set(0.4, 0.4, 0.4);
        this.runway.position.set(0, 0, 45);
        //this.runway.receiveShadow = true;
        
@@ -82,7 +82,7 @@ class Forklift {
       this.forklift = gltf.scene;
 
        
-       this.forklift.scale.set(0.01, 0.01, 0.01);
+       this.forklift.scale.set(0.02, 0.02, 0.02);
        this.forklift.position.set(0, 0, 25);
        this.forklift.rotation.y += 4.7;
        this.forklift.traverse(function(node){
@@ -137,9 +137,15 @@ class Airplane {
       this.airplane = gltf.scene;
 
        
-       this.airplane.scale.set(0.7, 0.7, 0.7);
-       this.airplane.position.set(42, 0, 8);
+       this.airplane.scale.set(1.2, 1.2, 1.2);
+       this.airplane.position.set(82, 0, -30);
        this.airplane.rotation.y = 4.7;
+
+       this.airplane.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+            node.receiveShadow = true;
+    })
        this.speed = {
                 vel: 0.1,
                 rot: 0,
@@ -293,9 +299,9 @@ document.body.appendChild(renderer.domElement);
 scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
-  45,
+  30,
   window.innerWidth / window.innerHeight,
-  0.1,
+  0.2,
   1000
 );
 
@@ -304,18 +310,19 @@ const camera = new THREE.PerspectiveCamera(
 const vehicle = new YUKA.Vehicle();
 
 const path = new YUKA.Path();
-path.add(new YUKA.Vector3(300, 100, 8));
-path.add(new YUKA.Vector3(80, 15, 8));
-path.add(new YUKA.Vector3(70, 10, 8));
-path.add(new YUKA.Vector3(60, 5, 8));
-path.add(new YUKA.Vector3(42, 1, 8));
-path.add(new YUKA.Vector3(-6, 0, 8));
-path.add(new YUKA.Vector3(-42, 0, 8));
-path.add(new YUKA.Vector3(-42, 0, 12));
-path.add(new YUKA.Vector3(-42, 0, 23));
-path.add(new YUKA.Vector3(-35, 0, 23));
-path.add(new YUKA.Vector3(-13, 0, 23));
-path.add(new YUKA.Vector3(-13, 0, 32));
+path.add(new YUKA.Vector3(300, 100, -31));
+path.add(new YUKA.Vector3(80, 15, -31));
+path.add(new YUKA.Vector3(70, 10, -31));
+path.add(new YUKA.Vector3(60, 5, -31));
+path.add(new YUKA.Vector3(42, 1, -31));
+path.add(new YUKA.Vector3(-6, 0, -31));
+path.add(new YUKA.Vector3(-42, 0, -31));
+path.add(new YUKA.Vector3(-86, 0, -31));
+path.add(new YUKA.Vector3(-86, 0, 4));
+path.add(new YUKA.Vector3(-24, 0, 4));
+path.add(new YUKA.Vector3(-24, 0, 14));
+//path.add(new YUKA.Vector3(-13, 0, 23));
+//path.add(new YUKA.Vector3(-13, 0, 32));
 
 
 
@@ -352,7 +359,7 @@ loader.load('../assets/airplane3/scene.gltf', function(gltf){
  // model.scale.set(5, 5, 5);
   scene.add(model);
   model.matrixAutoUpdate = false;
-  vehicle.scale = new YUKA.Vector3(5, 5, 5);
+  vehicle.scale = new YUKA.Vector3(10, 10, 10);
   vehicle.setRenderComponent(model, sync);
 });
 
@@ -361,7 +368,7 @@ const orbit = new OrbitControls(camera, renderer.domElement);
 const axesHelper = new THREE.AxesHelper(5);
 //scene.add(axesHelper);
 
-camera.position.set(-10, 10, 300);
+camera.position.set(-10, -100000, 300);
 orbit.update();
 
 const boxGeometry = new THREE.BoxGeometry();
@@ -468,23 +475,23 @@ const smallRunway = new smallRunwayLoad('/assets/smallRunway/scene.gltf');
 
 const building2 = new buildingLoad2('/assets/building/scene.gltf');
 
-//const parking = new parkingLoad('/assets/parking/scene.gltf');
+const parking = new parkingLoad('/assets/parking/scene.gltf');
 
 const sun = new sunLoad('/assets/sun/scene.gltf');
 
 const fence = new fenceLoad('/assets/fence/scene.gltf');
 
-const fence2 = new fenceLoad2('/assets/fence/scene.gltf');
+//const fence2 = new fenceLoad2('/assets/fence/scene.gltf');
 
-const fence3 = new fenceLoad3('/assets/fence/scene.gltf');
+//const fence3 = new fenceLoad3('/assets/fence/scene.gltf');
 
-const fence4 = new fenceLoad4('/assets/fence/scene.gltf');
+//const fence4 = new fenceLoad4('/assets/fence/scene.gltf');
 
 const fence5 = new fenceLoad5('/assets/fence/scene.gltf');
 
 const fence6 = new fenceLoad6('/assets/fence/scene.gltf');
 
-const fence7 = new fenceLoad7('/assets/fence/scene.gltf');
+//const fence7 = new fenceLoad7('/assets/fence/scene.gltf');
 
 const fence8 = new fenceLoad8('/assets/fence/scene.gltf');
 
@@ -492,7 +499,7 @@ const fence9 = new fenceLoad9('/assets/fence/scene.gltf');
 
 const small_city = new small_cityLoad('/assets/small_city2/scene.gltf');
 
-
+const building3 = new building3Load('/assets/building3/scene.gltf');
 
 
 
@@ -658,8 +665,8 @@ function controlTowerLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(5, 5, 5);
-      model1.position.set(28, 5, 30);
+      model1.scale.set(10, 10, 10);
+      model1.position.set(53, 9.5, 17);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -677,8 +684,8 @@ function buildingLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.5, 0.5, 0.5);
-      model1.position.set(45, 0, 85);
+      model1.scale.set(1, 1, 1);
+      model1.position.set(90, 0, 125);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -695,8 +702,8 @@ function buildingLoad2(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.5, 0.5, 0.5);
-      model1.position.set(-5, 0, 85);
+      model1.scale.set(1, 1, 1);
+      model1.position.set(-5, 0, 125);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -715,8 +722,8 @@ function helicopterLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.5, 0.5, 0.5);
-      model1.position.set(-61, 1.5, 31);
+      model1.scale.set(0.9, 0.9, 0.9);
+      model1.position.set(-120, 2.3, 18.5);
       //model1.position.set(0, 1.5, 0);
       model1.rotation.y = 4.7;
 
@@ -735,8 +742,8 @@ function heliportLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.7,0.7, 0.7);
-      model1.position.set(-61, 0, 32);
+      model1.scale.set(1.2,1.2,1.2);
+      model1.position.set(-120, 0, 18.5);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -757,8 +764,8 @@ function smallRunwayLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.5, 0.5, 0.08);
-      model1.position.set(-40.7, 0, 32);
+      model1.scale.set(1, 1, 0.16);
+      model1.position.set(-81, 0, 18);
       model1.rotation.y = 1.58;
 
       model1.traverse(function(node){
@@ -778,13 +785,14 @@ function parkingLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(1.3, 1.3, 1.3);
-      model1.position.set(-80, 0, 114);
+      model1.scale.set(7.9, 7.9, 8.2);
+      model1.position.set(-103, 0, 124);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
         if (node.isMesh)
             node.castShadow = true;
+            node.receiveShadow = true;
     })
       console.log(model1);
     }, undefined, function(error){
@@ -815,8 +823,8 @@ function fenceLoad(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.3,0.03, 0.1);
-      model1.position.set(44.5, 0, -17.5);
+      model1.scale.set(1.72 ,0.03, 0.1);
+      model1.position.set(-5, 0, -79);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -888,8 +896,8 @@ function fenceLoad5(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.31,0.03, 0.1);
-      model1.position.set(70, 0, 59);
+      model1.scale.set(1.2,0.03, 0.1);
+      model1.position.set(139, 0, 21);
       model1.rotation.y = 1.567;
 
       model1.traverse(function(node){
@@ -906,8 +914,8 @@ function fenceLoad6(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.31,0.03, 0.1);
-      model1.position.set(-75, 0, 7.6);
+      model1.scale.set(0.90,0.03, 0.1);
+      model1.position.set(-150, 0, -3);
       model1.rotation.y = 1.567;
 
       model1.traverse(function(node){
@@ -925,7 +933,7 @@ function fenceLoad7(url){
       const model1 = gltf.scene;
       scene.add(model1);
       model1.scale.set(0.165,0.03, 0.1);
-      model1.position.set(-75, 0, 46,5);
+      model1.position.set(-75, 0, 46.5);
       model1.rotation.y = 1.567;
 
       model1.traverse(function(node){
@@ -942,8 +950,8 @@ function fenceLoad8(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.275,0.03, 0.1);
-      model1.position.set(-52.5, 0, 60);
+      model1.scale.set(0.58,0.03, 0.1);
+      model1.position.set(-102, 0, 70);
       //model1.rotation.y = 4;
 
       model1.traverse(function(node){
@@ -960,8 +968,8 @@ function fenceLoad9(url){
   assetLoader.load(url, function(gltf){
       const model1 = gltf.scene;
       scene.add(model1);
-      model1.scale.set(0.13,0.03, 0.1);
-      model1.position.set(-30, 0, 70);
+      model1.scale.set(0.29,0.03, 0.1);
+      model1.position.set(-53, 0, 95);
       model1.rotation.y = 1.567;
 
       model1.traverse(function(node){
@@ -991,3 +999,21 @@ function small_cityLoad(url){
       console.error(error);
     });
 }
+
+function building3Load(url){
+  assetLoader.load(url, function(gltf){
+      const model1 = gltf.scene;
+      scene.add(model1);
+      model1.scale.set(100, 100, 100);
+      model1.position.set(-53, 0, 83);
+
+      model1.traverse(function(node){
+        if (node.isMesh)
+            node.castShadow = true;
+    })
+      console.log(model1);
+    }, undefined, function(error){
+      console.error(error);
+    });
+}
+
