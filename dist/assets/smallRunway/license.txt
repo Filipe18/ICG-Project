@@ -1,0 +1,11 @@
+Model Information:
+* title:	Runway
+* source:	https://sketchfab.com/3d-models/runway-205e3083fe7c403cb5b8897c4c6447bc
+* author:	Bottini (https://sketchfab.com/Bottini)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Runway" (https://sketchfab.com/3d-models/runway-205e3083fe7c403cb5b8897c4c6447bc) by Bottini (https://sketchfab.com/Bottini) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -184,6 +184,7 @@ class Airplane2 {
        this.airplane2.scale.set(5, 5, 5);
        this.airplane2.rotation.y = 4.7;
        this.airplane2.position.set(42, 0, 8);
+
        
        this.speed = {
                 vel: 0.1,
@@ -310,6 +311,8 @@ const camera = new THREE.PerspectiveCamera(
   1000
 );
 
+
+
 const camera2 = new THREE.PerspectiveCamera(
   95,
   window.innerWidth / window.innerHeight,
@@ -342,11 +345,11 @@ let activeCamera = camera;
 
 // Switch between cameras when 'C' key is pressed
 window.addEventListener('keydown', function (e) {
-  if (e.key === 'c' || e.key === 'C') {
+  if (e.key === '2') {
       activeCamera = camera2;
-    } else if(e.key === 'k' || e.key === 'K') {
+    } else if(e.key === '3') {
       activeCamera = camera3;
-    } else if(e.key === 'p' || e.key === 'P') {
+    } else if(e.key === '1') {
       activeCamera = camera;
   }
 });
@@ -412,6 +415,11 @@ loader.load('../assets/airplane3/scene.gltf', function(gltf){
   const model = gltf.scene;
  // model.scale.set(5, 5, 5);
   scene.add(model);
+gltf.scene.traverse(function(node){
+    if (node.isMesh)
+        node.receiveShadow = true;
+        node.castShadow = true;
+})
   model.matrixAutoUpdate = false;
   vehicle.scale = new YUKA.Vector3(10, 10, 10);
   vehicle.setRenderComponent(model, sync);
@@ -618,16 +626,16 @@ for (let i = 0; i < briefcase_count; i++) {
 
 window.addEventListener('keydown', function(e){
   if(e.key == "ArrowUp"){
-   forklift.speed.vel = 0.2
+   forklift.speed.vel = 0.16
   }
   if(e.key == "ArrowDown"){
-    forklift.speed.vel = -0.2
+    forklift.speed.vel = -0.16
   }
   if(e.key == "ArrowLeft"){
-    forklift.speed.rot = 0.1
+    forklift.speed.rot = 0.025
   }
   if(e.key == "ArrowRight"){
-    forklift.speed.rot = -0.1
+    forklift.speed.rot = -0.025
   }
 })
 window.addEventListener('keyup',function(e){

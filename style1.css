@@ -6,18 +6,21 @@ html, body {
   }
   canvas { 
     display: block;
+    
   }
   
   body { 
       margin: 0px;
+      
   }
   
   #in {
       font-size: .80em;
       position: absolute;
-      top: 20px;
+      top: 8px;
       text-align: center;
       width: 22%;
+      
   }
   
   .box {
@@ -25,18 +28,22 @@ html, body {
       padding: 5px;
       margin-right: 10px;
       border-radius: 10px;
+      
+      
   }
   
   .container-left {
     display: flex;
     justify-content: left;
     align-items: center;
+
   }
   
   .container-right {
       display: flex;
       justify-content: right;
       align-items: center;
+      
   }
   
   kbd {
@@ -51,4 +58,5 @@ html, body {
       line-height: 1;
       padding: 2px 4px;
       white-space: nowrap;
+      
   }

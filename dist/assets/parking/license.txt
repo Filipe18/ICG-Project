@@ -1,0 +1,11 @@
+Model Information:
+* title:	town_building-parking
+* source:	https://sketchfab.com/3d-models/town-building-parking-c65482351cc843458d43317923b469a0
+* author:	xenera (https://sketchfab.com/xenera)
+
+Model License:
+* license type:	CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions can not be distributed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "town_building-parking" (https://sketchfab.com/3d-models/town-building-parking-c65482351cc843458d43317923b469a0) by xenera (https://sketchfab.com/xenera) licensed under CC-BY-NC-ND-4.0 (http://creativecommons.org/licenses/by-nc-nd/4.0/)
